@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Instalacion, Empleado, Incidencia
 
-# Register your models here.
+admin.site.register(Instalacion)
+admin.site.register(Empleado)
+admin.site.register(Incidencia)
