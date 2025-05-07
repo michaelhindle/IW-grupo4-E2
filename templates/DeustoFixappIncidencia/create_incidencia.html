@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+{% block titulo %} Crear Incidencia {% endblock %}
+    <h2> Crear Incidencia </h2>
+    <form method="post" class="Incidencia-form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="prueba">
+            {{field.errors}}
+            <label class="Incidencia-label" form="{{field.id_for_label}}">{{ field.label }}</label>
+            {{field}}
+            {% if field.help.text %}
+            <p class="help">
+                {{field.help.text|safe}}
+            </p> 
+            {% endif %}
+        </div>
+        {% endfor %}
+        <input type="submit" class="boton" value="Nueva Incidencia">
+    </form>
+{% endblock %}

@@ -24,10 +24,10 @@ class IncidenciaMenuView(View):
         return render(request, "DeustoFixappIncidencia/menu_incidencia.html")
 
     def list_incidencias(self):
-        buscar = request.POST.get('buscar')
+        buscar = request.GET.get('buscar')
         incidencias = Incidencia.objects.all()
         if buscar:
-            incidencias = incidencias.objects.filter(
+            incidencias = incidencias.filter(
                 Q(titulo__icontains=buscar) |
                 Q(tipo__icontains=buscar)).distinct()
         return render(request, 'DeustoFixappIncidencia/list_incidencia.html', {'incidencias': incidencias})
@@ -44,15 +44,14 @@ class IncidenciaListView(ListView):
 class IncidenciaCreateView(View):
     def get(self, request):
         formulario = IncidenciaForm()
-        form = {'formulario': formulario}
-        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', form)
+        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', {'form' : formulario})
 
     def post(self, request):
-        formulario = IncidenciaForm(data=request.POST)
+        formulario = IncidenciaForm(request.POST)
         if formulario.is_valid():
             formulario.save()
             return redirect('menu_incidencia')
-        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', {'formulario': formulario})
+        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', {'form': formulario})
 
 
 # DETALLE de incidencia
@@ -86,16 +85,16 @@ class IncidenciaUpdateView(View):
         form = {'formulario': formulario, 'titulo': incidencia}
         if formulario.is_valid():
             formulario.save()
-            return redirect('menu_incidencias')
+            return redirect('menu_incidencia')
         return render(request, 'DeustoFixappIncidencia/update_incidencia.html', form)
 
 
 # ELIMINAR de incidencia
 class IncidenciaDeleteView(View):
     def get(self, request):
-        incidencia_id = request.POST.get('incidencia_id')
+        incidencia_id = request.POST('incidencia_id')
         incidencia = get_object_or_404(Incidencia, pk=incidencia_id)
-        return render(request, 'DeustoFixappIncidencia/menu_incidencia.html', {incidencia: incidencia})
+        return render(request, 'DeustoFixappIncidencia/menu_incidencia.html', {'incidencia': incidencia})
 
     def post(self, request, pk):
         incidencia = get_object_or_404(Incidencia, pk=pk)
