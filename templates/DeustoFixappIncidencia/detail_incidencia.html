@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block titulo %} Detalle de Incidencia {% endblock titulo %} 
+{% block content %}
+    <h2>Detalles de la Incidencia</h2>
+    <p><strong>Título:</strong> {{ incidencia.titulo }}</p>
+    <p><strong>Descripción:</strong> {{ incidencia.descripcion }}</p>
+    <p><strong>Tipo:</strong> {{ incidencia.get_tipo_display }}</p>
+    <p><strong>Urgencia:</strong> {{ incidencia.get_nivel_urgencia_display }}</p>
+    <p><strong>Estado:</strong> {{ incidencia.get_estado_display }}</p>
+    <p><strong>Fecha de apertura:</strong> {{ incidencia.fecha_apertura }}</p>
+    <p><strong>Fecha de resolución:</strong> {% if incidencia.fecha_resolucion %}{{ incidencia.fecha_resolucion }}{% else %}No resuelta{% endif %}</p>
+
+    <a href="{% url 'list_incidencia' %}">Volver al listado de incidencias</a>
+{% endblock %}

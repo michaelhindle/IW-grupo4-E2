@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+{% block titulo %} Listado de Incidencias {% endblock titulo %} 
+<h2> Listado </h2>
+<a href="{% url 'menu_incidencia' %}">Volver al menú de incidencias</a>
+<ul>
+    {% for incidencia in object_list %}
+    <li>
+        
+        {{incidencia.titulo}}, Apertura: {{ incidencia.fecha_apertura}}, Resolucion:  {{incidencia.fecha_resolucion}}
+       
+    </li>
+    {% empty %}
+        <li> No hay incidencias registradas </li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

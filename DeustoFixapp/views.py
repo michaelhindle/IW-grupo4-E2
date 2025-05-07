@@ -36,6 +36,7 @@ class IncidenciaListView(ListView):
     model = Incidencia
     template_name = 'DeustoFixappIncidencia/list_incidencia.html'
     context_object_name = "incidencias"
+    
 
 
 # CREAR de incidencia
@@ -63,7 +64,7 @@ class IncidenciaDetailView(View):
             'URGENCIA': incidencia.nivel_urgencia,
             'estado': incidencia.estado
         }
-        return JsonResponse(data)
+        return render(request, 'DeustoFixappIncidencia/incidencia_detail.html', {'incidencia' : incidencia})
 
 
 # ACTUALIZAR de incidencia
@@ -98,6 +99,11 @@ class IncidenciaDeleteView(View):
         incidencia = get_object_or_404(Incidencia, pk=pk)
         incidencia.delete()
         return redirect('menu_incidencias')
+
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------
 
 
 # Las views de Empleados
