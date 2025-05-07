@@ -2,11 +2,9 @@ from django.db.models import Q
 from django.http import request, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View, ListView, DetailView
-from django.urls import reverse
-from django.views.generic import TemplateView
 
-from DeustoFixapp.forms import IncidenciaForm
-from DeustoFixapp.models import Incidencia
+from DeustoFixapp.forms import IncidenciaForm, EmpleadoForm
+from DeustoFixapp.models import Incidencia, Empleado
 
 
 # Create your views here.
@@ -15,7 +13,7 @@ from DeustoFixapp.models import Incidencia
 
 class MenuPrincipalView(View):
     def get(self, request):
-        return render(request, "inicio.html")
+        return render(request, "base.html")
 
 
 # Las views de Incidencia
@@ -44,7 +42,7 @@ class IncidenciaListView(ListView):
 class IncidenciaCreateView(View):
     def get(self, request):
         formulario = IncidenciaForm()
-        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', {'form' : formulario})
+        return render(request, 'DeustoFixappIncidencia/create_incidencia.html', {'form': formulario})
 
     def post(self, request):
         formulario = IncidenciaForm(request.POST)
@@ -100,3 +98,79 @@ class IncidenciaDeleteView(View):
         incidencia = get_object_or_404(Incidencia, pk=pk)
         incidencia.delete()
         return redirect('menu_incidencias')
+
+
+# Las views de Empleados
+# MENU de empleados
+class EmpleadoMenuView(View):
+    def get(self, request):
+        return render(request, 'DeustoFixappEmpleado/menu_empleado.html')
+
+    def listar_empleados(request):
+        buscar = request.POST.get("buscar")
+        empleados = Empleado.objects.all()
+        if buscar:
+            empleados = empleados.objects.filter(
+                Q(dni__icontains=buscar) |
+                Q(nombre__icontains=buscar)
+            ).distinct()
+
+        return render(request, 'DeustoFixappEmpleado/menu_empleado.html', {"empleados": empleados})
+
+
+# LISTA de empleado
+class EmpleadoListView(ListView):
+    model = Empleado
+    template_name = 'DeustoFixappEmpleado/list_empleado.html'
+    context_object_name = 'empleados'
+
+
+# CREAR de emplado
+class EmpleadoCreateView(View):
+    def get(self, request):
+        formulario = EmpleadoForm()
+        return render(request, 'DeustoFixappEmpleado/create_empleado.html', {"form": formulario})
+
+    def post(self, request):
+        formulario = EmpleadoForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('menu_empleado')
+        return render(request, 'DeustoFixappEmpleado/create_empleado.html', {"form": formulario})
+
+
+# DETALLE de empleado
+class EmpleadoDetailView(View):
+    def get(self, request, pk):
+        empleado = get_object_or_404(Empleado, pk=pk)
+        data = {
+            'nombre': empleado.nombre,
+            'apellido': empleado.apellidos,
+            'email': empleado.email,
+            'telefono': empleado.telefono
+        }
+        return JsonResponse(data)
+
+#ACTUALIZAR de empleado
+class EmpleadoUpdateView(View):
+    def get(self, request, pk):
+        empleado = Empleado.objects.get(pk=pk)
+        formulario = EmpleadoForm(instance=empleado)
+
+        form = {'formulario': formulario,
+                'nombre': empleado
+                }
+        return render(request, 'DeustoFixappEmpleado/update_empleado.html', form)
+
+#ELIMINAR de empleado
+class EmpleadoDeleteView(View):
+    def get(self, request):
+        empleado_id = request.POST.get('empleado_id')
+        empleado = get_object_or_404(Empleado, pk= empleado_id)
+        return render(request, 'DeustoFixappEmpleado/menu_empleado.html', {"empleado": empleado})
+
+    def post(self, request, pk):
+        empleado = get_object_or_404(Empleado, pk=pk)
+        empleado.delete()
+        return redirect('menu_empleado')
+
