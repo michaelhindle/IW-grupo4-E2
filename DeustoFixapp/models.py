@@ -49,10 +49,10 @@ class Incidencia(models.Model):
     nivel_urgencia = models.CharField(max_length=10, choices=URGENCIA)
     estado = models.CharField(max_length=15, choices=ESTADO, default='Abierta')
     fecha_apertura = models.DateField(auto_now_add=True)
-    fecha_resolucion = models.DateField(blank=True)     
+    fecha_resolucion = models.DateField(blank=True, null=True)     
     
     instalacion = models.ForeignKey(Instalacion, on_delete=models.CASCADE)
     empleado_aginado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     
     def __str__ (self):
-        return self.titulo, self.tipo
+        return self.titulo
