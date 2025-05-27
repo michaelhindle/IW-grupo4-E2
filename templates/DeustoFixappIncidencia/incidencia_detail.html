@@ -9,6 +9,5 @@
     <p><strong>Estado:</strong> {{ incidencia.get_estado_display }}</p>
     <p><strong>Fecha de apertura:</strong> {{ incidencia.fecha_apertura }}</p>
     <p><strong>Fecha de resolución:</strong> {% if incidencia.fecha_resolucion %}{{ incidencia.fecha_resolucion }}{% else %}No resuelta{% endif %}</p>
-
     <a href="{% url 'list_incidencia' %}">Volver al listado de incidencias</a>
 {% endblock %}

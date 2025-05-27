@@ -6,7 +6,7 @@ from .views import (MenuPrincipalView, IncidenciaMenuView, IncidenciaListView, I
 urlpatterns = [
     # menu principal.
 
-    path('', MenuPrincipalView.as_view, name='menu_principal'),
+    path('menu/', MenuPrincipalView.as_view(), name='menu_principal'),
 
     # urls de incidencia.
 
@@ -15,7 +15,7 @@ urlpatterns = [
     path('create_incidencia/', IncidenciaCreateView.as_view(), name='create_incidencia'),
     path('update_incidencia/<int:pk>', IncidenciaUpdateView.as_view(), name='update_incidencia'),
     path('delete_incidencia/<int:pk>', IncidenciaDeleteView.as_view(), name='delete_incidencia'),
-    path('incidencia/<int:pk>', IncidenciaDetailView.as_view(), name='incidencia_detail'),
+    path('incidencia_detail/<int:pk>', IncidenciaDetailView.as_view(), name='incidencia_detail'),
 
     # urls de Instalacion
 
