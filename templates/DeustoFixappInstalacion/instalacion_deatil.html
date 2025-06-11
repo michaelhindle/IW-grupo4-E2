@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %} Detalle de Instalacion {% endblock titulo %}
+{% block content %}
+    <h2>Detalles de la Instalacion</h2>
+    <p><strong>Nombre:</strong> {{ instalacion.nombre }}</p>
+    <p><strong>Tipo:</strong> {{ instalacion.tipo }}</p>
+    <p><strong>Tipo_uso:</strong> {{ instalacion.tipo_uso }}</p>
+    <p><strong>Capacidad:</strong> {{ instalacion.capacidad }}</p>
+    <p><strong>Estado:</strong> {{ instalacion.estado }}</p>
+    <p><strong>Departamento responsable:</strong> {{ instalacion.departamento_responsable }}</p>
+    <a href="{% url 'list_incidencia' %}">Volver al listado de incidencias</a>
+{% endblock %}

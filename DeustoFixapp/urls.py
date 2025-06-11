@@ -1,7 +1,9 @@
 from django.urls import path
 from .views import (MenuPrincipalView, IncidenciaMenuView, IncidenciaListView, IncidenciaCreateView,
-                    IncidenciaUpdateView, IncidenciaDeleteView,IncidenciaDetailView ,EmpleadoMenuView, EmpleadoListView, EmpleadoCreateView,
-                    EmpleadoUpdateView, EmpleadoDeleteView)
+                    IncidenciaUpdateView, IncidenciaDeleteView, IncidenciaDetailView, EmpleadoMenuView,
+                    EmpleadoListView, EmpleadoCreateView,
+                    EmpleadoUpdateView, EmpleadoDeleteView, InstalacionMenuView, InstalacionCreateView,
+                    InstalacionListView, InstalacionUpdateView, InstalacionDeleteView)
 
 urlpatterns = [
     # menu principal.
@@ -18,6 +20,11 @@ urlpatterns = [
     path('incidencia_detail/<int:pk>', IncidenciaDetailView.as_view(), name='incidencia_detail'),
 
     # urls de Instalacion
+    path('menu_instalacion/', InstalacionMenuView.as_view(), name='menu_instalacion'),
+    path('list_instalacion/', InstalacionListView.as_view(), name='list_instalacion'),
+    path('create_instalacion/', InstalacionCreateView.as_view(), name='create_instalacion'),
+    path('update_instalacion/<int:pk>', InstalacionUpdateView.as_view(), name='update_instalacion'),
+    path('delete_instalacion/<int:pk>', InstalacionDeleteView.as_view(), name='delete_instalacion'),
 
     # urls de Empleados
 

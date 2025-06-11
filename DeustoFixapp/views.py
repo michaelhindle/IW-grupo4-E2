@@ -3,8 +3,8 @@ from django.http import request, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import View, ListView, DetailView
 
-from DeustoFixapp.forms import IncidenciaForm, EmpleadoForm
-from DeustoFixapp.models import Incidencia, Empleado
+from DeustoFixapp.forms import IncidenciaForm, EmpleadoForm, InstalacionForm
+from DeustoFixapp.models import Incidencia, Empleado, Instalacion
 
 
 # Create your views here.
@@ -36,7 +36,6 @@ class IncidenciaListView(ListView):
     model = Incidencia
     template_name = 'DeustoFixappIncidencia/list_incidencia.html'
     context_object_name = "incidencias"
-    
 
 
 # CREAR de incidencia
@@ -64,7 +63,7 @@ class IncidenciaDetailView(View):
             'URGENCIA': incidencia.nivel_urgencia,
             'estado': incidencia.estado
         }
-        return render(request, 'DeustoFixappIncidencia/incidencia_detail.html', {'incidencia' : incidencia})
+        return render(request, 'DeustoFixappIncidencia/incidencia_detail.html', {'incidencia': incidencia})
 
 
 # ACTUALIZAR de incidencia
@@ -100,10 +99,11 @@ class IncidenciaDeleteView(View):
         incidencia.delete()
         return redirect('menu_incidencias')
 
-#----------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
 
 
 # Las views de Empleados
@@ -157,7 +157,8 @@ class EmpleadoDetailView(View):
         }
         return JsonResponse(data)
 
-#ACTUALIZAR de empleado
+
+# ACTUALIZAR de empleado
 class EmpleadoUpdateView(View):
     def get(self, request, pk):
         empleado = Empleado.objects.get(pk=pk)
@@ -168,11 +169,12 @@ class EmpleadoUpdateView(View):
                 }
         return render(request, 'DeustoFixappEmpleado/update_empleado.html', form)
 
-#ELIMINAR de empleado
+
+# ELIMINAR de empleado
 class EmpleadoDeleteView(View):
     def get(self, request):
         empleado_id = request.POST.get('empleado_id')
-        empleado = get_object_or_404(Empleado, pk= empleado_id)
+        empleado = get_object_or_404(Empleado, pk=empleado_id)
         return render(request, 'DeustoFixappEmpleado/menu_empleado.html', {"empleado": empleado})
 
     def post(self, request, pk):
@@ -180,3 +182,83 @@ class EmpleadoDeleteView(View):
         empleado.delete()
         return redirect('menu_empleado')
 
+
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------
+
+#MENU de instalacion
+class InstalacionMenuView(View):
+    def get(self, request):
+        return render(request, "DeustoFixappInstalacion/menu_instalacion.html")
+
+    def list_instalacion(self):
+        buscar = request.GET.get('buscar')
+        instalacion = Incidencia.objects.all()
+        if buscar:
+            instalacion = instalacion.filter(
+                Q(titulo__icontains=buscar) |
+                Q(tipo__icontains=buscar)).distinct()
+        return render(request, 'DeustoFixappInstalacion/list_instalacion.html', {'instalacion': instalacion})
+
+# LIST de instalacion
+class InstalacionListView(ListView):
+    model = Instalacion
+    template_name = 'DeustoFixappInstalacion/list_instalacion.html'
+    context_object_name = 'instalacion'
+
+
+# CREAR de instalacion
+class InstalacionCreateView(View):
+    def get(self, request):
+        formulario = InstalacionForm()
+        return render(request, 'DeustoFixappInstalacion/create_instalacion.html', {"form": formulario})
+
+    def post(self, request):
+        formulario = InstalacionForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('menu_instalacion')
+        return render(request, 'DeustoFixappInstalacion/create_instalacion.html', {"form": formulario})
+
+
+# DETALLE de instalacion
+class InstalacionDetailView(View):
+    def get(self, request, pk):
+        instalacion = get_object_or_404(Instalacion, pk=pk)
+        data = {
+            'nombre': instalacion.nombre,
+            'tipo': instalacion.tipo,
+            'tipo_uso': instalacion.tipo_uso,
+            'ubiacion': instalacion.ubiacion,
+            'capacidad': instalacion.capacidad,
+            'estado': instalacion.estado,
+            'departamento_responsable': instalacion.departamento_responsable
+        }
+        return JsonResponse(data)
+
+
+# ACTUALIZAR de instalacion
+class InstalacionUpdateView(View):
+    def get(self, request, pk):
+        instalacion = Instalacion.objects.get(pk=pk)
+        formulario = InstalacionForm(instance=instalacion)
+
+        form = {'formulario': formulario,
+                'nombre': instalacion
+                }
+        return render(request, 'DeustoFixappInstalacion/update_instalacion.html', form)
+
+
+# ELIMINAR de empleado
+class InstalacionDeleteView(View):
+    def get(self, request):
+        instalacion_id = request.POST.get('instalacion_id')
+        instalacion = get_object_or_404(Instalacion, pk=instalacion_id)
+        return render(request, 'DeustoFixappInstalacion/menu_instalacion.html', {"instalacion": instalacion})
+
+    def post(self, request, pk):
+        instalacion = get_object_or_404(Instalacion, pk=pk)
+        instalacion.delete()
+        return redirect('menu_instalacion')
