@@ -3,7 +3,7 @@ from .views import (MenuPrincipalView, IncidenciaMenuView, IncidenciaListView, I
                     IncidenciaUpdateView, IncidenciaDeleteView, IncidenciaDetailView, EmpleadoMenuView,
                     EmpleadoListView, EmpleadoCreateView,
                     EmpleadoUpdateView, EmpleadoDeleteView, InstalacionMenuView, InstalacionCreateView,
-                    InstalacionListView, InstalacionUpdateView, InstalacionDeleteView)
+                    InstalacionListView, InstalacionUpdateView, InstalacionDeleteView,InstalacionDetailView)
 
 urlpatterns = [
     # menu principal.
@@ -13,7 +13,8 @@ urlpatterns = [
     # urls de incidencia.
 
     path('menu_incidencia/', IncidenciaMenuView.as_view(), name='menu_incidencia'),
-    path('list_incidencia/', IncidenciaListView.as_view(), name='list_incidencia'),
+    path("list_incidencia/", IncidenciaListView.as_view(), name="list_incidencia"),
+    path('list_incidencia/<int:instalacion_id>/', IncidenciaListView.as_view(), name='list_incidencia_filtrada'),
     path('create_incidencia/', IncidenciaCreateView.as_view(), name='create_incidencia'),
     path('update_incidencia/<int:pk>', IncidenciaUpdateView.as_view(), name='update_incidencia'),
     path('delete_incidencia/<int:pk>', IncidenciaDeleteView.as_view(), name='delete_incidencia'),
@@ -25,6 +26,7 @@ urlpatterns = [
     path('create_instalacion/', InstalacionCreateView.as_view(), name='create_instalacion'),
     path('update_instalacion/<int:pk>', InstalacionUpdateView.as_view(), name='update_instalacion'),
     path('delete_instalacion/<int:pk>', InstalacionDeleteView.as_view(), name='delete_instalacion'),
+    path("istalacion_detail/<int:pk>", InstalacionDetailView.as_view(), name="instalacion_detail"),
 
     # urls de Empleados
 

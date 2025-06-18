@@ -7,7 +7,7 @@
     {% for incidencia in object_list %}
     <li>
         
-        {{incidencia.titulo}}, Apertura: {{ incidencia.fecha_apertura}}, Resolucion:  {{incidencia.fecha_resolucion}}, {{incidencia.empleado_aginado}} , <a href="{% url 'incidencia_detail' incidencia.pk %}">Detalle_Incidencia</a></p>, <a href="{% url 'delete_incidencia' incidencia.pk %}">Borrar Incidencia</a>
+        {{incidencia.titulo}}, Apertura: {{ incidencia.fecha_apertura}}, Empelado: {{incidencia.empleado_asignado.nombre}} ,Resolucion:  {{incidencia.fecha_resolucion}}, {{incidencia.empleado_aginado}} , <a href="{% url 'incidencia_detail' incidencia.pk %}">Detalle_Incidencia</a></p>, <a href="{% url 'delete_incidencia' incidencia.pk %}">Borrar Incidencia</a>
        
     </li>
     {% empty %}

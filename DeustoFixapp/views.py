@@ -13,7 +13,8 @@ from DeustoFixapp.models import Incidencia, Empleado, Instalacion
 
 class MenuPrincipalView(View):
     def get(self, request):
-        return render(request, "base.html")
+        Instalaciones = Instalacion.objects.all()
+        return render(request, "menu_principal.html", {'object_list' : Instalaciones })
 
 
 # Las views de Incidencia
@@ -36,6 +37,13 @@ class IncidenciaListView(ListView):
     model = Incidencia
     template_name = 'DeustoFixappIncidencia/list_incidencia.html'
     context_object_name = "incidencias"
+    
+    def get_queryset(self):
+        instalacion_id = self.kwargs.get('instalacion_id')
+        if instalacion_id:
+            return Incidencia.objects.filter(instalacion_id=instalacion_id)
+        return Incidencia.objects.all()
+        
 
 
 # CREAR de incidencia
@@ -227,16 +235,7 @@ class InstalacionCreateView(View):
 class InstalacionDetailView(View):
     def get(self, request, pk):
         instalacion = get_object_or_404(Instalacion, pk=pk)
-        data = {
-            'nombre': instalacion.nombre,
-            'tipo': instalacion.tipo,
-            'tipo_uso': instalacion.tipo_uso,
-            'ubiacion': instalacion.ubiacion,
-            'capacidad': instalacion.capacidad,
-            'estado': instalacion.estado,
-            'departamento_responsable': instalacion.departamento_responsable
-        }
-        return JsonResponse(data)
+        return render( request, 'DeustoFixappInstalacion/instalacion_detail.html' , {'instalacion' : instalacion})
 
 
 # ACTUALIZAR de instalacion

@@ -1,23 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-<title> {% block titulo %} <h2> Menu DeustoFix</h2> {% endblock %} </title>
+<title> {% block titulo %}  Menu DeustoFix  {% endblock %} </title>
 
 
 <nav>
-    <a href="">Incidencias</a>
-    <a href="">Empleados</a>
+    <a href="{% url 'menu_incidencia' %}">Incidencias</a>
+    <a href="{% url 'menu_empleado' %}">Empleados</a>
 </nav>
 
 <div>
     <h2>INSTALACIONES</h2>
 
     <ul>
-        <li>
-            {% for instalacion in object_list  %}
-    
-                {{instalacion.nombre}}, {{instalacion.ubicacion}}
-
+        {% for instalacion in object_list  %}
+        <li>   
+            {{instalacion.nombre}}, {{instalacion.ubicacion}}
+            <a href="{% url 'list_incidencia_filtrada' instalacion.id %}"> Ver incidencias relacionadas</a> 
+            <a href="{% url 'instalacion_detail' instalacion.id %}"> Detalles de instalacion</a> 
             
         </li>
             {% empty %}
