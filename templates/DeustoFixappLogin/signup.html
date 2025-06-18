@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="signup">
+    <h2>Registro</h2>
+    <form id="signup-form" class="signup-form" method="post" data-signup-failed="{{ signup_failed|yesno:"true,false" }}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Nombre de usuario</label>
+            {{ form.username }}
+            <p>Menos de 150 caracteres. Solo letras, dígitos y @/./+/-/_.</p>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">Contraseña</label>
+            {{ form.password1 }}
+            <p>La contraseña no puede ser muy similar al nombre de usuario.<br>
+               La contraseña debe contener, al menos, 8 caracteres.<br>
+               La contraseña no puede ser una contraseña comúnmente utilizada.<br>
+               La contraseña no puede ser enteramente numérica.</p>
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">Confirma la contraseña</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit">Registrarse</button>
+    </form>
+</main>
+{% endblock %}

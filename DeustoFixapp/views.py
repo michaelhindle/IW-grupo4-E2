@@ -1,9 +1,12 @@
+from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import request, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import View, ListView, DetailView
 
-from DeustoFixapp.forms import IncidenciaForm, EmpleadoForm, InstalacionForm
+from DeustoFixapp.forms import IncidenciaForm, EmpleadoForm, InstalacionForm, LoginForm, SignupForm
 from DeustoFixapp.models import Incidencia, Empleado, Instalacion
 
 
@@ -11,6 +14,7 @@ from DeustoFixapp.models import Incidencia, Empleado, Instalacion
 
 # La view del menu principal
 
+@method_decorator(login_required(login_url='/DeustoFixapp/login'), name='dispatch')
 class MenuPrincipalView(View):
     def get(self, request):
         Instalaciones = Instalacion.objects.all()
@@ -116,6 +120,7 @@ class IncidenciaDeleteView(View):
 
 # Las views de Empleados
 # MENU de empleados
+@method_decorator(login_required(login_url='/DeustoFixapp/login'), name='dispatch')
 class EmpleadoMenuView(View):
     def get(self, request):
         return render(request, 'DeustoFixappEmpleado/menu_empleado.html')
@@ -197,6 +202,7 @@ class EmpleadoDeleteView(View):
 # ----------------------------------------------------------------------------------------------------------
 
 #MENU de instalacion
+@method_decorator(login_required(login_url='/DeustoFixapp/login'), name='dispatch')
 class InstalacionMenuView(View):
     def get(self, request):
         return render(request, "DeustoFixappInstalacion/menu_instalacion.html")
@@ -261,3 +267,43 @@ class InstalacionDeleteView(View):
         instalacion = get_object_or_404(Instalacion, pk=pk)
         instalacion.delete()
         return redirect('menu_instalacion')
+
+
+class SignupView(View):
+    def post(self, request):
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        else:
+            return render(request, 'DeustoFixappLogin/signup.html', {'form': form, 'signup_failed': True})
+
+    def get(self, request):
+        form = SignupForm()
+        return render(request, 'DeustoFixappLogin/signup.html', {'form': form})
+
+
+class LoginView(View):
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect('menu_incidencia')
+            else:
+                return render(request, 'DeustoFixappLogin/login.html', {'form': form, 'login_failed': True})
+        else:
+            return render(request, 'DeustoFixappLogin/login.html', {'form': form})
+
+    def get(self, request):
+        form = LoginForm()
+        return render(request, 'DeustoFixappLogin/login.html', {'form': form})
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')

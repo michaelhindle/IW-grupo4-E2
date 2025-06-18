@@ -3,7 +3,8 @@ from .views import (MenuPrincipalView, IncidenciaMenuView, IncidenciaListView, I
                     IncidenciaUpdateView, IncidenciaDeleteView, IncidenciaDetailView, EmpleadoMenuView,
                     EmpleadoListView, EmpleadoCreateView,
                     EmpleadoUpdateView, EmpleadoDeleteView, InstalacionMenuView, InstalacionCreateView,
-                    InstalacionListView, InstalacionUpdateView, InstalacionDeleteView,InstalacionDetailView)
+                    InstalacionListView, InstalacionUpdateView, InstalacionDeleteView, InstalacionDetailView,
+                    SignupView, LoginView, LogoutView)
 
 urlpatterns = [
     # menu principal.
@@ -34,5 +35,12 @@ urlpatterns = [
     path('list_empleado/', EmpleadoListView.as_view(), name='list_empleado'),
     path('create_empleado/', EmpleadoCreateView.as_view(), name='create_empleado'),
     path('update_empleado/<int:pk>', EmpleadoUpdateView.as_view(), name='update_empleado'),
-    path('delete_empleado/<int:pk>', EmpleadoDeleteView.as_view(), name='delete_empleado')
+    path('delete_empleado/<int:pk>', EmpleadoDeleteView.as_view(), name='delete_empleado'),
+
+    #urls de inicio de sesion
+
+    path('signup', SignupView.as_view(), name='signup'),
+    path('login', LoginView.as_view(), name='login'),
+    path('logout', LogoutView.as_view(), name='logout'),
 ]
+
